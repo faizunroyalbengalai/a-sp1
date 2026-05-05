@@ -23,6 +23,7 @@ jobs:
           distribution: temurin
           java-version: '21'
       - run: mvn test -q
+        working-directory: a-sp1
 
   build:
     name: Build JAR
@@ -36,10 +37,11 @@ jobs:
           java-version: '21'
       - name: Build with Maven
         run: mvn package -DskipTests -q
+        working-directory: a-sp1
       - uses: actions/upload-artifact@v4
         with:
           name: app-jar
-          path: target/*.jar
+          path: a-sp1/target/*.jar
           retention-days: 1
 
   provision:
@@ -177,4 +179,3 @@ jobs:
           for i in $(seq 1 12); do
             curl -sf http://${{ needs.provision.outputs.server_ip }}/health && break || sleep 15
           done
-
